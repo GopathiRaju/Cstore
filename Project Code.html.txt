@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Online Fuel & Retail Store Management</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+<style>
+body{background:linear-gradient(135deg,#667eea,#764ba2);min-height:100vh;font-family:Arial,sans-serif}
+.login-container{display:flex;justify-content:center;align-items:center;min-height:100vh;padding:20px}
+.login-card{background:white;border-radius:20px;padding:50px;max-width:500px;width:100%;box-shadow:0 10px 40px rgba(0,0,0,0.3)}
+.user-type-btn{padding:15px;border:2px solid #ddd;background:white;border-radius:10px;cursor:pointer;transition:all 0.3s;width:100%;margin-bottom:15px}
+.user-type-btn:hover{border-color:#667eea;background:#f8f9ff}
+.user-type-btn.active{background:#667eea;color:white;border-color:#667eea}
+.dashboard{display:none}
+.dashboard.active{display:block}
+.sidebar{background:white;height:calc(100vh - 70px);position:fixed;top:70px;left:0;width:250px;box-shadow:2px 0 10px rgba(0,0,0,0.1);overflow-y:auto}
+.nav-item{padding:15px 25px;cursor:pointer;transition:all 0.3s;border-left:4px solid transparent}
+.nav-item:hover{background:#f8f9ff}
+.nav-item.active{background:#f8f9ff;color:#667eea;border-left-color:#667eea;font-weight:600}
+.main-content{margin-left:250px;padding:30px;min-height:calc(100vh - 70px)}
+.section{display:none}
+.section.active{display:block}
+.card{background:white;border-radius:15px;padding:30px;margin-bottom:20px;box-shadow:0 5px 20px rgba(0,0,0,0.1)}
+.stats{background:linear-gradient(135deg,#667eea,#764ba2);color:white;border-radius:15px;padding:25px;text-align:center}
+.btn-primary{background:linear-gradient(135deg,#667eea,#764ba2);border:none;padding:12px;font-weight:600}
+.btn-primary:hover{opacity:0.9}
+</style>
+</head>
+<body>
+
+<div id="loginPage" class="login-container">
+<div class="login-card">
+<h1 class="text-center mb-4" style="color:#667eea"><i class="fas fa-gas-pump"></i> Online Fuel & Retail Store Management</h1>
+<div id="userTypeSelection">
+<button type="button" class="user-type-btn" id="adminBtn"><i class="fas fa-user-shield fa-2x d-block mb-2"></i>Admin Login</button>
+<button type="button" class="user-type-btn" id="employeeBtn"><i class="fas fa-user fa-2x d-block mb-2"></i>Employee Login</button>
+</div>
+<div id="loginForm" style="display:none">
+<div class="alert alert-info"><strong>Credentials:</strong><br>Admin: admin / admin123<br>Employee: employee / emp123</div>
+<input type="text" class="form-control mb-3" id="username" placeholder="Username">
+<input type="password" class="form-control mb-3" id="password" placeholder="Password">
+<button type="button" class="btn btn-primary w-100 mb-2" id="loginBtn">Login</button>
+<button type="button" class="btn btn-secondary w-100" id="backBtn">Back</button>
+</div>
+</div>
+</div>
+
+<div id="dashboard" class="dashboard">
+<nav class="navbar navbar-light" style="background:white;box-shadow:0 2px 10px rgba(0,0,0,0.1)">
+<div class="container-fluid">
+<span class="navbar-brand" style="color:#667eea;font-weight:700"><i class="fas fa-gas-pump"></i> Online Fuel & Retail Store Management</span>
+<div><span class="me-3">User: <strong id="currentUser"></strong></span><button class="btn btn-danger btn-sm" id="logoutBtn">Logout</button></div>
+</div>
+</nav>
+
+<div class="sidebar">
+<div class="nav-item" data-section="home"><i class="fas fa-home"></i> Home</div>
+<div class="nav-item active" data-section="dashboard"><i class="fas fa-chart-line"></i> Dashboard</div>
+<div class="nav-item" data-section="store"><i class="fas fa-shopping-cart"></i> Store</div>
+<div class="nav-item" data-section="games"><i class="fas fa-gamepad"></i> Games</div>
+<div class="nav-item" data-section="fuel"><i class="fas fa-gas-pump"></i> Fuel</div>
+<div class="nav-item" data-section="inventory"><i class="fas fa-boxes"></i> Inventory</div>
+<div class="nav-item" data-section="report"><i class="fas fa-file-alt"></i> Reports</div>
+</div>
+
+<div class="main-content">
+<div id="homeSection" class="section">
+<div class="card" style="background:linear-gradient(135deg,#667eea,#764ba2);color:white">
+<h1><i class="fas fa-gas-pump"></i> Welcome to RAJVARMA</h1>
+<p class="lead">Your complete fuel and retail solution</p>
+</div>
+<div class="row mt-4">
+<div class="col-md-6">
+<div class="card">
+<h3 style="color:#667eea"><i class="fas fa-building"></i> Company Information</h3>
+<h4>RAJVARMA Store & Gas Station</h4>
+<p><strong>Established:</strong> 2020</p>
+<p><strong>Services:</strong> Fuel Station, Convenience Store, Lottery & Gaming</p>
+</div>
+</div>
+<div class="col-md-6">
+<div class="card">
+<h3 style="color:#667eea"><i class="fas fa-address-book"></i> Contact Information</h3>
+<p><i class="fas fa-phone"></i> Phone: (555) 123-4567</p>
+<p><i class="fas fa-envelope"></i> Email: contact@rajvarma.com</p>
+<p><i class="fas fa-map-marker-alt"></i> Address: 123 Main St, Anytown, USA</p>
+<p><i class="fas fa-clock"></i> Hours: 24/7</p>
+</div>
+</div>
+</div>
+<div class="row mt-3">
+<div class="col-md-4">
+<div class="card text-center">
+<img src="https://images.unsplash.com/photo-1545262810-77515befe149?w=400" style="width:100%;height:200px;object-fit:cover;border-radius:10px" alt="Fuel Station">
+<h5 class="mt-3">Modern Fuel Station</h5>
+</div>
+</div>
+<div class="col-md-4">
+<div class="card text-center">
+<img src="https://images.unsplash.com/photo-1604719312566-8912e9227c6a?w=400" style="width:100%;height:200px;object-fit:cover;border-radius:10px" alt="Store">
+<h5 class="mt-3">Convenience Store</h5>
+</div>
+</div>
+<div class="col-md-4">
+<div class="card text-center">
+<img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=400" style="width:100%;height:200px;object-fit:cover;border-radius:10px" alt="Team">
+<h5 class="mt-3">Professional Team</h5>
+</div>
+</div>
+</div>
+</div>
+
+<div id="dashboardSection" class="section active">
+<div class="card" style="background:linear-gradient(135deg,#667eea,#764ba2);color:white;text-align:center;padding:60px">
+<div style="background:white;width:150px;height:150px;margin:0 auto 30px;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 10px 30px rgba(0,0,0,0.3)">
+<i class="fas fa-gas-pump" style="font-size:60px;color:#667eea"></i>
+</div>
+<h1 style="font-size:48px;font-weight:700">RAJVARMA</h1>
+<h3 style="font-weight:300">Fuel & Store Management System</h3>
+<p style="font-size:18px">Your Trusted Partner in Fuel and Retail Services</p>
+</div>
+<div class="row mt-4">
+<div class="col-md-4">
+<div class="card text-center">
+<img src="https://images.unsplash.com/photo-1556740758-90de374c12ad?w=400" style="width:100%;height:200px;object-fit:cover;border-radius:10px" alt="Service">
+<h5 class="mt-3" style="color:#667eea">Premium Service</h5>
+<p>Open 24/7</p>
+</div>
+</div>
+<div class="col-md-4">
+<div class="card text-center">
+<img src="https://images.unsplash.com/photo-1545262810-77515befe149?w=400" style="width:100%;height:200px;object-fit:cover;border-radius:10px" alt="Fuel">
+<h5 class="mt-3" style="color:#667eea">Quality Fuel</h5>
+<p>Premium grade fuel</p>
+</div>
+</div>
+<div class="col-md-4">
+<div class="card text-center">
+<img src="https://images.unsplash.com/photo-1604719312566-8912e9227c6a?w=400" style="width:100%;height:200px;object-fit:cover;border-radius:10px" alt="Selection">
+<h5 class="mt-3" style="color:#667eea">Wide Selection</h5>
+<p>Everything you need</p>
+</div>
+</div>
+</div>
+<div class="row mt-3">
+<div class="col-md-6">
+<div class="card">
+<h5 style="color:#667eea">Contact Information</h5>
+<p>Phone: (555) 123-4567</p>
+<p>Email: contact@rajvarma.com</p>
+<p>Address: 123 Main Street, Anytown, USA</p>
+</div>
+</div>
+<div class="col-md-6">
+<div class="card">
+<h5 style="color:#667eea">About RAJVARMA</h5>
+<p>RAJVARMA is your premier destination for quality fuel and convenience shopping.</p>
+<p><strong>Services:</strong> Fuel, Store, Lottery & Gaming</p>
+</div>
+</div>
+</div>
+</div>
+
+<div id="storeSection" class="section">
+<div class="card">
+<h2><i class="fas fa-shopping-cart"></i> Store Transaction</h2>
+<hr>
+<div class="mb-3">
+<label class="form-label">Select Item</label>
+<select class="form-select" id="storeItem">
+<option value="">Choose item</option>
+<option value="2.50">Soda - $2.50</option>
+<option value="3.00">Chips - $3.00</option>
+<option value="1.50">Candy - $1.50</option>
+<option value="1.00">Water - $1.00</option>
+</select>
+</div>
+<div class="mb-3">
+<label class="form-label">Quantity</label>
+<input type="number" class="form-control" id="storeQty" value="1" min="1">
+</div>
+<div class="mb-3">
+<label class="form-label">Payment Type</label>
+<select class="form-select" id="storePayment">
+<option value="">Choose payment method</option>
+<option value="Cash">Cash</option>
+<option value="Credit Card">Credit Card</option>
+<option value="Debit Card">Debit Card</option>
+<option value="Mobile Payment">Mobile Payment</option>
+</select>
+</div>
+<div class="mb-3">
+<label class="form-label">Transaction Date</label>
+<input type="date" class="form-control" id="storeDate">
+</div>
+<div style="background:#f8f9ff;border:2px solid #667eea;border-radius:10px;padding:20px;text-align:center;margin:20px 0">
+<p class="mb-1">Total Amount</p>
+<h4 id="storeTotal" style="color:#667eea">$0.00</h4>
+</div>
+<button class="btn btn-primary w-100" id="storeSaveBtn"><i class="fas fa-check"></i> Process Sale</button>
+</div>
+</div>
+
+<div id="gamesSection" class="section">
+<div class="card">
+<h2><i class="fas fa-gamepad"></i> Gaming/Lottery Transaction</h2>
+<hr>
+<div class="mb-3">
+<label class="form-label">Select Game/Ticket</label>
+<select class="form-select" id="gameType">
+<option value="">Choose game</option>
+<option value="5.00">Lotto Max - $5.00</option>
+<option value="2.00">Scratch Card - $2.00</option>
+<option value="3.00">PowerBall - $3.00</option>
+<option value="1.00">Daily Pick - $1.00</option>
+</select>
+</div>
+<div class="mb-3">
+<label class="form-label">Quantity</label>
+<input type="number" class="form-control" id="gameQty" value="1" min="1">
+</div>
+<div class="mb-3">
+<label class="form-label">Payment Type</label>
+<select class="form-select" id="gamePayment">
+<option value="">Choose payment method</option>
+<option value="Cash">Cash</option>
+<option value="Credit Card">Credit Card</option>
+<option value="Debit Card">Debit Card</option>
+</select>
+</div>
+<div class="mb-3">
+<label class="form-label">Transaction Date</label>
+<input type="date" class="form-control" id="gameDate">
+</div>
+<div style="background:#f8f9ff;border:2px solid #667eea;border-radius:10px;padding:20px;text-align:center;margin:20px 0">
+<p class="mb-1">Total Amount</p>
+<h4 id="gameTotal" style="color:#667eea">$0.00</h4>
+</div>
+<button class="btn btn-primary w-100" id="gameSaveBtn"><i class="fas fa-check"></i> Process</button>
+</div>
+</div>
+
+<div id="fuelSection" class="section">
+<div class="card">
+<h2><i class="fas fa-gas-pump"></i> Fuel Transaction</h2>
+<hr>
+<div class="mb-3">
+<label class="form-label">Fuel Type</label>
+<select class="form-select" id="fuelType">
+<option value="">Select fuel type</option>
+<option value="3.50">Regular - $3.50/gal</option>
+<option value="4.00">Premium - $4.00/gal</option>
+<option value="3.80">Diesel - $3.80/gal</option>
+<option value="3.20">E85 - $3.20/gal</option>
+</select>
+</div>
+<div class="mb-3">
+<label class="form-label">Quantity (Gallons)</label>
+<input type="number" class="form-control" id="fuelQty" placeholder="Enter gallons" step="0.01" min="0">
+</div>
+<div class="mb-3">
+<label class="form-label">License Plate Number</label>
+<input type="text" class="form-control" id="fuelPlate" placeholder="e.g., ABC-1234">
+</div>
+<div class="mb-3">
+<label class="form-label">Payment Type</label>
+<select class="form-select" id="fuelPayment">
+<option value="">Choose payment method</option>
+<option value="Cash">Cash</option>
+<option value="Credit Card">Credit Card</option>
+<option value="Debit Card">Debit Card</option>
+</select>
+</div>
+<div class="mb-3">
+<label class="form-label">Transaction Date</label>
+<input type="date" class="form-control" id="fuelDate">
+</div>
+<div style="background:#f8f9ff;border:2px solid #667eea;border-radius:10px;padding:20px;text-align:center;margin:20px 0">
+<p class="mb-1">Total Amount</p>
+<h4 id="fuelTotal" style="color:#667eea">$0.00</h4>
+</div>
+<button class="btn btn-primary w-100" id="fuelSaveBtn"><i class="fas fa-check"></i> Process</button>
+</div>
+</div>
+
+<div id="inventorySection" class="section">
+<div class="card">
+<h2><i class="fas fa-boxes"></i> Inventory Management</h2>
+<hr>
+<div class="row mb-4">
+<div class="col-md-4"><input type="text" class="form-control" id="invName" placeholder="Item Name"></div>
+<div class="col-md-3"><input type="number" class="form-control" id="invStock" placeholder="Stock"></div>
+<div class="col-md-3"><input type="number" class="form-control" id="invCost" placeholder="Cost" step="0.01"></div>
+<div class="col-md-2"><button class="btn btn-primary w-100" id="invAddBtn">Add</button></div>
+</div>
+<table class="table table-striped">
+<thead style="background:#667eea;color:white"><tr><th>Item</th><th>Stock</th><th>Cost</th></tr></thead>
+<tbody id="invTable"><tr><td colspan="3" class="text-center">No items</td></tr></tbody>
+</table>
+</div>
+</div>
+
+<div id="reportSection" class="section">
+<div class="card">
+<h2><i class="fas fa-file-alt"></i> Sales Reports</h2>
+<hr>
+<div class="row mb-4">
+<div class="col-md-4"><div class="stats"><h3 id="repDay">$0.00</h3><p>Day Total</p></div></div>
+<div class="col-md-4"><div class="stats"><h3 id="repMonth">$0.00</h3><p>Month Total</p></div></div>
+<div class="col-md-4"><div class="stats"><h3 id="repYear">$0.00</h3><p>Year Total</p></div></div>
+</div>
+<table class="table table-striped">
+<thead style="background:#667eea;color:white"><tr><th>Time</th><th>Type</th><th>Amount</th></tr></thead>
+<tbody id="repTable"><tr><td colspan="3" class="text-center">No transactions</td></tr></tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+
+<script>
+var store={txs:[],inv:[],user:null};
+var userType='';
+
+document.addEventListener('DOMContentLoaded',function(){
+// --- Persistence helpers ---
+function saveStore(){
+	try{
+		localStorage.setItem('raj_store',JSON.stringify(store));
+	}catch(e){console.warn('Could not save to localStorage',e)}
+}
+function loadStore(){
+	try{
+		var data=localStorage.getItem('raj_store');
+		if(data){
+			var parsed=JSON.parse(data);
+			store.txs=parsed.txs||[];
+			store.inv=parsed.inv||[];
+			store.user=parsed.user||null;
+		}
+	}catch(e){console.warn('Could not load from localStorage',e)}
+}
+
+// initialize from storage
+loadStore();
+document.getElementById('adminBtn').addEventListener('click',function(){
+userType='admin';
+this.classList.add('active');
+document.getElementById('employeeBtn').classList.remove('active');
+setTimeout(function(){
+document.getElementById('userTypeSelection').style.display='none';
+document.getElementById('loginForm').style.display='block';
+},200);
+});
+
+document.getElementById('employeeBtn').addEventListener('click',function(){
+userType='employee';
+this.classList.add('active');
+document.getElementById('adminBtn').classList.remove('active');
+setTimeout(function(){
+document.getElementById('userTypeSelection').style.display='none';
+document.getElementById('loginForm').style.display='block';
+},200);
+});
+
+document.getElementById('backBtn').addEventListener('click',function(){
+document.getElementById('loginForm').style.display='none';
+document.getElementById('userTypeSelection').style.display='block';
+document.getElementById('adminBtn').classList.remove('active');
+document.getElementById('employeeBtn').classList.remove('active');
+userType='';
+});
+
+document.getElementById('loginBtn').addEventListener('click',function(){
+var u=document.getElementById('username').value;
+var p=document.getElementById('password').value;
+var ok=false;
+if(userType==='admin'&&u==='admin'&&p==='admin123')ok=true;
+if(userType==='employee'&&u==='employee'&&p==='emp123')ok=true;
+if(ok){
+store.user=u;
+	saveStore();
+document.getElementById('currentUser').textContent=u;
+document.getElementById('loginPage').style.display='none';
+document.getElementById('dashboard').classList.add('active');
+}else{
+alert('Invalid credentials! Use admin/admin123 or employee/emp123');
+}
+});
+
+document.getElementById('logoutBtn').addEventListener('click',function(){
+document.getElementById('dashboard').classList.remove('active');
+document.getElementById('loginPage').style.display='flex';
+document.getElementById('loginForm').style.display='none';
+document.getElementById('userTypeSelection').style.display='block';
+	store.user=null; saveStore();
+});
+
+document.querySelectorAll('.nav-item').forEach(function(item){
+item.addEventListener('click',function(){
+var sec=this.getAttribute('data-section');
+document.querySelectorAll('.nav-item').forEach(function(n){n.classList.remove('active')});
+this.classList.add('active');
+document.querySelectorAll('.section').forEach(function(s){s.classList.remove('active')});
+document.getElementById(sec+'Section').classList.add('active');
+});
+});
+
+document.getElementById('storeItem').addEventListener('change',function(){
+var p=parseFloat(this.value)||0;
+var q=parseFloat(document.getElementById('storeQty').value)||1;
+document.getElementById('storeTotal').textContent='$'+(p*q).toFixed(2);
+});
+
+document.getElementById('storeQty').addEventListener('input',function(){
+var p=parseFloat(document.getElementById('storeItem').value)||0;
+var q=parseFloat(this.value)||1;
+document.getElementById('storeTotal').textContent='$'+(p*q).toFixed(2);
+});
+
+document.getElementById('storeSaveBtn').addEventListener('click',function(){
+var total=parseFloat(document.getElementById('storeTotal').textContent.replace('$',''));
+var pay=document.getElementById('storePayment').value;
+var dt=document.getElementById('storeDate').value;
+if(total>0&&pay&&dt){
+store.txs.push({type:'store',amt:total,payment:pay,date:dt,time:new Date()});
+	saveStore();
+alert('Transaction saved successfully!');
+updateStats();
+document.getElementById('storeItem').value='';
+document.getElementById('storeQty').value='1';
+document.getElementById('storePayment').value='';
+document.getElementById('storeDate').value='';
+document.getElementById('storeTotal').textContent='$0.00';
+}else{
+alert('Please fill all required fields!');
+}
+});
+
+document.getElementById('gameType').addEventListener('change',function(){
+var p=parseFloat(this.value)||0;
+var q=parseFloat(document.getElementById('gameQty').value)||1;
+document.getElementById('gameTotal').textContent='$'+(p*q).toFixed(2);
+});
+
+document.getElementById('gameQty').addEventListener('input',function(){
+var p=parseFloat(document.getElementById('gameType').value)||0;
+var q=parseFloat(this.value)||1;
+document.getElementById('gameTotal').textContent='$'+(p*q).toFixed(2);
+});
+
+document.getElementById('gameSaveBtn').addEventListener('click',function(){
+var total=parseFloat(document.getElementById('gameTotal').textContent.replace('$',''));
+var pay=document.getElementById('gamePayment').value;
+var dt=document.getElementById('gameDate').value;
+if(total>0&&pay&&dt){
+store.txs.push({type:'game',amt:total,payment:pay,date:dt,time:new Date()});
+	saveStore();
+alert('Transaction saved successfully!');
+updateStats();
+document.getElementById('gameType').value='';
+document.getElementById('gameQty').value='1';
+document.getElementById('gamePayment').value='';
+document.getElementById('gameDate').value='';
+document.getElementById('gameTotal').textContent='$0.00';
+}else{
+alert('Please fill all required fields!');
+}
+});
+
+document.getElementById('fuelType').addEventListener('change',function(){
+var p=parseFloat(this.value)||0;
+var q=parseFloat(document.getElementById('fuelQty').value)||0;
+document.getElementById('fuelTotal').textContent='$'+(p*q).toFixed(2);
+});
+
+document.getElementById('fuelQty').addEventListener('input',function(){
+var p=parseFloat(document.getElementById('fuelType').value)||0;
+var q=parseFloat(this.value)||0;
+document.getElementById('fuelTotal').textContent='$'+(p*q).toFixed(2);
+});
+
+document.getElementById('fuelSaveBtn').addEventListener('click',function(){
+var total=parseFloat(document.getElementById('fuelTotal').textContent.replace('$',''));
+var pay=document.getElementById('fuelPayment').value;
+var dt=document.getElementById('fuelDate').value;
+var plate=document.getElementById('fuelPlate').value;
+if(total>0&&pay&&dt&&plate){
+store.txs.push({type:'fuel',amt:total,payment:pay,date:dt,plate:plate,time:new Date()});
+	saveStore();
+alert('Transaction saved successfully!');
+updateStats();
+document.getElementById('fuelType').value='';
+document.getElementById('fuelQty').value='';
+document.getElementById('fuelPlate').value='';
+document.getElementById('fuelPayment').value='';
+document.getElementById('fuelDate').value='';
+document.getElementById('fuelTotal').textContent='$0.00';
+}else{
+alert('Please fill all required fields!');
+}
+});
+
+document.getElementById('invAddBtn').addEventListener('click',function(){
+var n=document.getElementById('invName').value;
+var s=document.getElementById('invStock').value;
+var c=document.getElementById('invCost').value;
+if(n&&s&&c){
+store.inv.push({name:n,stock:s,cost:c});
+	saveStore();
+alert('Item added successfully!');
+updateInv();
+document.getElementById('invName').value='';
+document.getElementById('invStock').value='';
+document.getElementById('invCost').value='';
+}else{
+alert('Please fill all fields!');
+}
+});
+
+function updateInv(){
+var h='';
+store.inv.forEach(function(i){
+h+='<tr><td>'+i.name+'</td><td>'+i.stock+'</td><td>$'+i.cost+'</td></tr>';
+});
+document.getElementById('invTable').innerHTML=h||'<tr><td colspan="3" class="text-center">No items</td></tr>';
+}
+
+function updateStats(){
+var d=0,m=0,y=0;
+store.txs.forEach(function(t){
+d+=t.amt;
+m+=t.amt;
+y+=t.amt;
+});
+document.getElementById('repDay').textContent='$'+d.toFixed(2);
+document.getElementById('repMonth').textContent='$'+m.toFixed(2);
+document.getElementById('repYear').textContent='$'+y.toFixed(2);
+var h='';
+store.txs.slice(-10).reverse().forEach(function(t){
+h+='<tr><td>'+t.time.toLocaleString()+'</td><td>'+t.type.toUpperCase()+'</td><td>$'+t.amt.toFixed(2)+'</td></tr>';
+});
+document.getElementById('repTable').innerHTML=h||'<tr><td colspan="3" class="text-center">No transactions</td></tr>';
+}
+// set default dates to today for convenience
+var today=new Date().toISOString().slice(0,10);
+["storeDate","gameDate","fuelDate"].forEach(function(id){
+	var el=document.getElementById(id);
+	if(el && !el.value) el.value=today;
+});
+
+// restore UI from loaded store
+updateInv();
+updateStats();
+if(store.user){document.getElementById('currentUser').textContent=store.user}
+});
+</script>
+</body>
+</html>
